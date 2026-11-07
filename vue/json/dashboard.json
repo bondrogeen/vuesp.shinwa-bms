@@ -1,0 +1,170 @@
+[
+  {
+    "id": "device.lastTime",
+    "name": "Last update",
+    "type": "button",
+    "opts": {
+      "disabled": true
+    },
+    "icon": "plug",
+    "args": ["device.lastTime"],
+    "get": "v === 0 ? 1 : 0",
+    "getTo": "v ? 'ONLINE' : 'OFFLINE'"
+  },
+  {
+    "id": "device.status3",
+    "name": "Charge MOSFET",
+    "type": "button",
+    "opts": {
+      "disabled": true
+    },
+    "icon": "bulb",
+    "args": ["device.status3"],
+    "get": "v & 2",
+    "getTo": "v ? 'ON' : 'OFF'"
+  },
+  {
+    "id": "device.status3",
+    "name": "Discharge MOSFET",
+    "type": "button",
+    "opts": {
+      "disabled": true
+    },
+    "icon": "bulb",
+    "args": ["device.status3"],
+    "get": "v & 4",
+    "getTo": "v ? 'ON' : 'OFF'"
+  },
+  {
+    "id": "device.voltage",
+    "name": "Voltage",
+    "type": "info",
+    "icon": "battery-2",
+    "args": ["device.voltage"],
+    "get": "v/1000",
+    "getTo": "`${v} V`"
+  },
+  {
+    "id": "device.current",
+    "name": "Current",
+    "type": "info",
+    "icon": "light",
+    "args": ["device.current"],
+    "get": "v/100",
+    "getTo": "`${v} A`"
+  },
+  {
+    "id": "device.cellHigh",
+    "name": "Cell high",
+    "type": "info",
+    "icon": "battery",
+    "args": ["device.cell1", "device.cell2", "device.cell3", "device.cell4"],
+    "get": "Math.max(v, a, b, c)",
+    "getTo": "`${(v / 1000).toFixed(3)} V`"
+  },
+  {
+    "id": "device.cellLow",
+    "name": "Cell low",
+    "type": "info",
+    "icon": "battery",
+    "args": ["device.cell1", "device.cell2", "device.cell3", "device.cell4"],
+    "get": "Math.min(v, a, b, c)",
+    "getTo": "`${(v / 1000).toFixed(3)} V`"
+  },
+  {
+    "id": "device.delta",
+    "name": "Cell delta",
+    "type": "info",
+    "icon": "battery",
+    "args": ["device.cell1", "device.cell2", "device.cell3", "device.cell4"],
+    "get": "Math.max(v, a, b, c) - Math.min(v, a, b, c)",
+    "getTo": "`${(v / 1000)} V`"
+  },
+  {
+    "id": "device.cell1",
+    "name": "Cell 1",
+    "type": "info",
+    "icon": "battery",
+    "args": ["device.cell1"],
+    "get": "(v/1000).toFixed(3)",
+    "getTo": "`${v} V`"
+  },
+  {
+    "id": "device.cell2",
+    "name": "Cell 2",
+    "type": "info",
+    "icon": "battery",
+    "args": ["device.cell2"],
+    "get": "(v/1000).toFixed(3)",
+    "getTo": "`${v} V`"
+  },
+  {
+    "id": "device.cell3",
+    "name": "Cell 3",
+    "type": "info",
+    "icon": "battery",
+    "args": ["device.cell3"],
+    "get": "(v/1000).toFixed(3)",
+    "getTo": "`${v} V`"
+  },
+  {
+    "id": "device.cell4",
+    "name": "Cell 4",
+    "type": "info",
+    "icon": "battery",
+    "args": ["device.cell4"],
+    "get": "(v/1000).toFixed(3)",
+    "getTo": "`${v} V`"
+  },
+  {
+    "id": "device.cycle",
+    "name": "Cycle",
+    "type": "info",
+    "icon": "restart",
+    "args": ["device.cycle"]
+  },
+  {
+    "id": "device.SOC",
+    "name": "Battery capacity",
+    "type": "info",
+    "icon": "store",
+    "args": ["device.SOC"],
+    "getTo": "`${v}%`"
+  },
+  {
+    "id": "device.temp1",
+    "name": "temp1",
+    "type": "info",
+    "icon": "therm",
+    "args": ["device.temp1"],
+    "get": "(v/10).toFixed(2)",
+    "getTo": "`${v} °C`"
+  },
+  {
+    "id": "device.temp2",
+    "name": "temp2",
+    "type": "info",
+    "icon": "therm",
+    "args": ["device.temp2"],
+    "get": "(v/10).toFixed(2)",
+    "getTo": "`${v} °C`"
+  },
+  {
+    "id": "device.temp3",
+    "name": "temp3",
+    "type": "info",
+    "icon": "therm",
+    "args": ["device.temp3"],
+    "get": "(v/10).toFixed(2)",
+    "getTo": "`${v} °C`"
+  },
+  {
+    "id": "device.temp4",
+    "name": "temp4",
+    "type": "info",
+    "icon": "therm",
+    "args": ["device.temp4"],
+    "get": "(v/10).toFixed(2)",
+    "getTo": "`${v} °C`"
+  }
+]
