@@ -1,0 +1,25 @@
+{
+  "$schema": "https://vuesp.ru/schema/vuesp-project.json",
+  "name": "vuesp.shinwa-bms",
+  "summary": "Saihang/Anenji LiFePO4 BMS monitor over RS232 with cell, current and protection data.",
+  "description": "## Vuesp Saihang BMS\n\nESP32-C3 monitor for Saihang/Anenji 12.8 V 100 Ah LiFePO4 batteries. The BMS is polled over RS232 at 9600 baud using the ASCII-HEX protocol (`~` frame start, `\\r` frame end).\n\nThe firmware reads model, version and serial number, the analog pack (voltage, current, capacity and four cell voltages) and the warning/status pack (charge/discharge MOSFETs, cell and pack protections, temperatures). The standard Vuesp dashboard, Wi-Fi, ScriptRunner, LittleFS and OTA features are included.",
+  "platforms": [
+    "ESP32-C3"
+  ],
+  "tags": [
+    "bms",
+    "saihang",
+    "shinwa",
+    "lifepo4",
+    "battery",
+    "esp32-c3"
+  ],
+  "preset": "bms",
+  "createdWith": "vuesp-create@1.0.1",
+  "createdAt": "2026-11-08T02:03:02+03:00",
+  "template": {
+    "source": "local",
+    "ref": "local",
+    "commit": "8ebddcfc6f90135d6b2c1532c29eac0fd293f4ae"
+  }
+}
