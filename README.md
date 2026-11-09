@@ -3,6 +3,16 @@
 
 Anenji 12.8V 100AH LiFePO4 Battery
 
+## Документация
+
+Подробное описание платы, распиновка, схема, ScriptRunner и ограничения — в [DOCS.md](./DOCS.md).
+
+## Особенности
+
+- UART 9600 8N1: RX GPIO5, TX GPIO6.
+- Четыре ячейки, четыре NTC, ток, напряжение, ёмкость и SOC.
+- ASCII-HEX кадры `~ … \r`, команды B0, 31E0 и 33E0.
+
 
 [BmsTool V1.0.18.zip](./github/BmsTool%20V1.0.18.zip) - BmsTool
 
