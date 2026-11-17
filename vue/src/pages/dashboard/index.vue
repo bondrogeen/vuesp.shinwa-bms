@@ -63,7 +63,7 @@ import { CMD, PORT } from '@/generated/protocol';
 import { useConnection } from '@/composables/useConnection';
 import { pathListDef } from '@/utils/const';
 
-import { CardButton, CardDate, CardDimmer, CardInfo, CardInput, CardList, ItemEdit, VDragDrop } from 'vuesp-components/components';
+import { ICON_NAMES, CardButton, CardDate, CardDimmer, CardInfo, CardInput, CardList, ItemEdit, VDragDrop } from 'vuesp-components/components';
 
 import { useLocale } from '@/composables/useLocale';
 
@@ -188,33 +188,7 @@ const setState = (item: IDashboardItem, value: unknown) => {
   }
 };
 
-const icons = [
-  'bulb',
-  'video',
-  'windy',
-  'camera',
-  'light',
-  'tv',
-  'therm',
-  'store',
-  'socket',
-  'plug',
-  'noti',
-  'lock',
-  'chart',
-  'restart',
-  'battery',
-  'battery-2',
-  'ram',
-  'map',
-  'speaker',
-  'timer',
-  'snow',
-  'blaze',
-  'door',
-  'shut',
-  'plant',
-];
+const icons = [...ICON_NAMES];
 
 const cards = [...(dashboardCards || []), 'chart'];
 

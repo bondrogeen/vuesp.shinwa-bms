@@ -39,7 +39,7 @@
     "id": "device.voltage",
     "name": "Voltage",
     "type": "info",
-    "icon": "battery-2",
+    "icon": "battery",
     "args": ["device.voltage"],
     "get": "a/1000",
     "getTo": "`${v} V`"
