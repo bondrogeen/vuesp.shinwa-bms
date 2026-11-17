@@ -154,7 +154,7 @@ bool saveConfigBlock(const char* path, const uint8_t* buf, size_t size) {
 bool loadScriptFromFS(uint8_t id, char* buffer, uint16_t& len) {
   Serial.println("loadScriptFromFS");
   Serial.println(id);
-  File file = LittleFS.open("/scripts.txt", "r");
+  File file = LittleFS.open("/www/scripts.txt", "r");
   if (!file) {
     return false;
   }

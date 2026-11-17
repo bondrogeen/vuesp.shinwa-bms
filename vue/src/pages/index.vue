@@ -5,31 +5,31 @@
     </div>
 
     <div class="w-full grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
-      <card-main class="p-4">
+      <VCard class="p-4" hover>
         <div class="flex justify-between items-center mb-4 text-xs">
           <span class="text-2xl font-bold">Saihang BMS (12v)</span>
 
           <div class="flex flex-col">
             <span class="font-semibold">
               Ver:
-              <span class="text-gray-500 text-wrap">{{ device.version }}</span>
+              <span class="text-gray-dark-25 text-wrap">{{ device.version }}</span>
             </span>
 
             <!-- <span class="font-semibold">
               Date:
-              <span class="text-gray-500">{{}}</span>
+              <span class="text-gray-dark-25">{{}}</span>
             </span> -->
           </div>
         </div>
 
-        <hr class="my-4 h-px bg-gray-200 dark:bg-gray-800 border-0 rounded" />
+        <hr class="my-4 h-px bg-gray-light-10 dark:bg-gray-dark-30 border-0 rounded" />
 
         <div class="flex justify-between items-center mb-4 text-xs">
           <span class="text-2xl font-bold">Status</span>
 
           <div class="flex">
             <span
-              class="flex justify-center flex-[0_0_110px] min-w-12 text-sm font-semibold px-2 py-1 rounded-full glass-panel"
+              class="flex justify-center flex-[0_0_110px] min-w-12 text-sm font-semibold px-2 py-1 rounded-full glass-inset"
               :class="{ 'animate-shake text-green-500': device.current > 0, 'animate-shake text-red-500/80': device.current < 0 }"
             >
               {{ getStatus(device.current) }}
@@ -39,35 +39,35 @@
 
         <div class="flex justify-between mt-1">
           <div>
-            <div class="text-gray-500 text-xs uppercase">SOC</div>
+            <div class="text-gray-dark-25 dark:text-gray-light-10 text-xs uppercase">SOC</div>
 
             <div class="text-4xl font-bold">
               {{ device.SOC }}
-              <span class="text-gray-500">%</span>
+              <span class="text-gray-dark-25 dark:text-gray-light-10">%</span>
             </div>
           </div>
 
           <div class="text-right">
-            <div class="text-gray-500 text-xs uppercase">Remaining capacity</div>
+            <div class="text-gray-dark-25 dark:text-gray-light-10 text-xs uppercase">Remaining capacity</div>
 
             <div class="text-xl font-bold">
               {{ device.capacity / 100 }}
               /
               {{ device.fccRaw / 100 }}
-              <span class="text-sm font-normal text-gray-500">AH</span>
+              <span class="text-sm font-normal text-gray-dark-25 dark:text-gray-light-10">AH</span>
             </div>
           </div>
         </div>
-      </card-main>
+      </VCard>
 
-      <card-main class="p-4">
+      <VCard class="p-4" hover>
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-2">
             <div class="flex items-center justify-between gap-2">
               <span class="text-sm">ChgMos:</span>
 
               <span
-                class="flex justify-center flex-[0_0_60px] min-w-12 text-sm font-semibold px-2 py-1 rounded-full glass-panel"
+                class="flex justify-center flex-[0_0_60px] min-w-12 text-sm font-semibold px-2 py-1 rounded-full glass-inset"
                 :class="{ 'animate-shake text-green-500': device.status3 & 2 }"
               >
                 {{ device.status3 & 2 ? 'ON' : 'OFF' }}
@@ -77,7 +77,7 @@
               <span class="text-sm">DisMos:</span>
 
               <span
-                class="flex justify-center flex-[0_0_60px] min-w-12 text-sm font-semibold px-2 py-1 rounded-full glass-panel"
+                class="flex justify-center flex-[0_0_60px] min-w-12 text-sm font-semibold px-2 py-1 rounded-full glass-inset"
                 :class="{ 'animate-shake text-green-500': device.status3 & 4 }"
               >
                 {{ device.status3 & 4 ? 'ON' : 'OFF' }}
@@ -90,7 +90,7 @@
               <span class="text-sm">Balance:</span>
 
               <span
-                class="flex justify-center flex-[0_0_60px] min-w-12 text-sm font-semibold px-5 py-1 rounded-full glass-panel"
+                class="flex justify-center flex-[0_0_60px] min-w-12 text-sm font-semibold px-5 py-1 rounded-full glass-inset"
                 :class="{ 'animate-shake text-green-500': device.balanceStatus }"
               >
                 {{ device.balanceStatus ? 'ON' : 'OFF' }}
@@ -101,7 +101,7 @@
               <span class="text-sm">Protection:</span>
 
               <span
-                class="flex justify-center flex-[0_0_60px] min-w-12 text-sm font-semibold px-5 py-1 rounded-full glass-panel"
+                class="flex justify-center flex-[0_0_60px] min-w-12 text-sm font-semibold px-5 py-1 rounded-full glass-inset"
                 :class="{ 'animate-shake text-red-500': device.protectionStatus }"
               >
                 {{ device.protectionStatus ? 'ON' : 'OFF' }}
@@ -115,115 +115,115 @@
             {{ item }}
           </li>
         </ul>
-      </card-main>
+      </VCard>
 
-      <card-main class="p-4 md:col-span-2 2xl:col-span-1">
+      <VCard class="p-4 md:col-span-2 2xl:col-span-1" hover>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-2 text-center">
           <div class="col-span-2 md:col-span-1">
-            <div class="text-gray-500 text-xs uppercase font-medium">Total voltage</div>
+            <div class="text-gray-dark-25 dark:text-gray-light-10 text-xs uppercase font-medium">Total voltage</div>
 
             <div class="font-semibold text-lg">
               {{ toFixed(device.voltage / 1000) }}
-              <span class="text-xs text-gray-500">V</span>
+              <span class="text-xs text-gray-dark-25 dark:text-gray-light-10">V</span>
             </div>
           </div>
           <div>
-            <div class="text-gray-500 text-xs uppercase font-medium">Current</div>
+            <div class="text-gray-dark-25 dark:text-gray-light-10 text-xs uppercase font-medium">Current</div>
 
             <div class="font-semibold text-lg">
               {{ toFixed(device.current / 100) }}
-              <span class="text-xs text-gray-500">A</span>
+              <span class="text-xs text-gray-dark-25 dark:text-gray-light-10">A</span>
             </div>
           </div>
           <div>
-            <div class="text-gray-500 text-xs uppercase font-medium">Power</div>
+            <div class="text-gray-dark-25 dark:text-gray-light-10 text-xs uppercase font-medium">Power</div>
 
             <div class="font-semibold text-lg">
               {{ Math.round(device.current ? (device.voltage / 1000) * (device.current / 100) : 0) }}
-              <span class="text-xs text-gray-500">W</span>
+              <span class="text-xs text-gray-dark-25 dark:text-gray-light-10">W</span>
             </div>
           </div>
         </div>
 
-        <hr class="my-4 h-px bg-gray-200 dark:bg-gray-800 border-0 rounded" />
+        <hr class="my-4 h-px bg-gray-light-10 dark:bg-gray-dark-30 border-0 rounded" />
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-center">
           <div>
-            <div class="text-gray-500 text-xs uppercase font-medium">temp 1</div>
+            <div class="text-gray-dark-25 dark:text-gray-light-10 text-xs uppercase font-medium">temp 1</div>
 
             <div class="font-semibold text-lg">
               {{ toFixed(device.temp1 / 10) }}
-              <span class="text-xs text-gray-500">°C</span>
+              <span class="text-xs text-gray-dark-25 dark:text-gray-light-10">°C</span>
             </div>
           </div>
 
           <div>
-            <div class="text-gray-500 text-xs uppercase font-medium">temp 2</div>
+            <div class="text-gray-dark-25 dark:text-gray-light-10 text-xs uppercase font-medium">temp 2</div>
 
             <div class="font-semibold text-lg">
               {{ toFixed(device.temp2 / 10) }}
-              <span class="text-xs text-gray-500">°C</span>
+              <span class="text-xs text-gray-dark-25 dark:text-gray-light-10">°C</span>
             </div>
           </div>
 
           <div>
-            <div class="text-gray-500 text-xs uppercase font-medium">temp 3</div>
+            <div class="text-gray-dark-25 dark:text-gray-light-10 text-xs uppercase font-medium">temp 3</div>
 
             <div class="font-semibold text-lg">
               {{ toFixed(device.temp3 / 10) }}
-              <span class="text-xs text-gray-500">°C</span>
+              <span class="text-xs text-gray-dark-25 dark:text-gray-light-10">°C</span>
             </div>
           </div>
 
           <div>
-            <div class="text-gray-500 text-xs uppercase font-medium">temp 4</div>
+            <div class="text-gray-dark-25 dark:text-gray-light-10 text-xs uppercase font-medium">temp 4</div>
 
             <div class="font-semibold text-lg">
               {{ toFixed(device.temp4 / 10) }}
-              <span class="text-xs text-gray-500">°C</span>
+              <span class="text-xs text-gray-dark-25 dark:text-gray-light-10">°C</span>
             </div>
           </div>
         </div>
-      </card-main>
+      </VCard>
 
-      <card-main class="p-4 md:col-span-2 2xl:col-span-4">
+      <VCard class="p-4 md:col-span-2 2xl:col-span-4" hover>
         <div class="grid grid-cols-3 gap-1 text-center">
           <div>
-            <div class="text-gray-500 text-xs uppercase font-medium">High</div>
+            <div class="text-gray-dark-25 dark:text-gray-light-10 text-xs uppercase font-medium">High</div>
 
             <div class="font-semibold">
               {{ toFixed(Math.max(device.cell1, device.cell2, device.cell3, device.cell4) / 1000, 3) }}
-              <span class="text-xs text-gray-500">V</span>
+              <span class="text-xs text-gray-dark-25 dark:text-gray-light-10">V</span>
             </div>
           </div>
           <div>
-            <div class="text-gray-500 text-xs uppercase font-medium">Low</div>
+            <div class="text-gray-dark-25 dark:text-gray-light-10 text-xs uppercase font-medium">Low</div>
 
             <div class="font-semibold">
               {{ toFixed(Math.min(device.cell1, device.cell2, device.cell3, device.cell4) / 1000, 3) }}
-              <span class="text-xs text-gray-500">V</span>
+              <span class="text-xs text-gray-dark-25 dark:text-gray-light-10">V</span>
             </div>
           </div>
           <div>
-            <div class="text-gray-500 text-xs uppercase font-medium">Δ</div>
+            <div class="text-gray-dark-25 dark:text-gray-light-10 text-xs uppercase font-medium">Δ</div>
 
             <div class="font-semibold">
               {{ toFixed((Math.max(device.cell1, device.cell2, device.cell3, device.cell4) - Math.min(device.cell1, device.cell2, device.cell3, device.cell4)) / 1000, 3) }}
-              <span class="text-xs text-gray-500">V</span>
+              <span class="text-xs text-gray-dark-25 dark:text-gray-light-10">V</span>
             </div>
           </div>
         </div>
 
-        <hr class="my-4 h-px bg-gray-200 dark:bg-gray-800 border-0 rounded" />
+        <hr class="my-4 h-px bg-gray-light-10 dark:bg-gray-dark-30 border-0 rounded" />
 
         <div class="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-2">
           <div v-for="i of device.cellCount" :key="i" class="relative">
-            <div class="text-center py-1.5 glass-panel rounded-xl relative overflow-hidden">
-              <div class="text-sm text-gray-500">{{ `#${i}` }}</div>
+            <VCard variant="outline" padding="none" class="text-center py-1.5 relative overflow-hidden">
+              <div class="text-sm text-gray-dark-25 dark:text-gray-light-10">{{ `#${i}` }}</div>
 
               <div class="font-bold text-base">
                 {{ getValue(i) }}
-                <span class="text-xs text-gray-500">V</span>
+                <span class="text-xs text-gray-dark-25 dark:text-gray-light-10">V</span>
               </div>
 
               <!-- <div
@@ -234,23 +234,24 @@
                 }"
               ></div> -->
 
-              <!-- <div v-if="isBalance(device.balanceStatus, i)" class="absolute top-1 left-2 size-5 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center border border-blue-500">
+              <!-- <div v-if="isBalance(device.balanceStatus, i)" class="absolute top-1 left-2 size-5 rounded-full bg-gray-light-10 dark:bg-gray-dark-30 flex items-center justify-center border border-blue-500">
                 <span class="text-xs">B</span>
               </div> -->
-            </div>
+            </VCard>
 
-            <div class="absolute top-1/2 left-[calc(100%-1px)] -translate-y-1/2 h-8 w-1 rounded-tr-xl rounded-br-xl bg-gray-200 dark:bg-gray-800"></div>
+            <div class="absolute top-1/2 left-[calc(100%-1px)] -translate-y-1/2 h-8 w-1 rounded-tr-xl rounded-br-xl bg-gray-light-10 dark:bg-gray-dark-30"></div>
           </div>
         </div>
-      </card-main>
+      </VCard>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { VCard } from 'vuesp-components/components';
 import type { IShinwaDevice } from '@/types';
 
-import { KEYS } from '@/utils/const';
+import { KEY } from '@/utils/const';
 
 import { useConnection } from '@/composables/useConnection';
 import { useLocale } from '@/composables/useLocale';
@@ -259,7 +260,7 @@ import { computed } from 'vue';
 const { $t } = useLocale();
 
 const { main } = useConnection((send) => {
-  send(KEYS.DEVICE);
+  send(KEY.DEVICE);
 });
 
 const device = computed(() => main.value.device as IShinwaDevice);

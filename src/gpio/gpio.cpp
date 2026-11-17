@@ -1,17 +1,17 @@
 #include "./gpio.h"
 
 Port ports[11] = {
-    {KEY_PORT, 1, 0, GPIO_MODE_OUTPUT, GPIO_INTERRUPT_OFF, GPIO_BIT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
-    {KEY_PORT, 2, 0, GPIO_MODE_OUTPUT, GPIO_INTERRUPT_OFF, GPIO_BIT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
-    {KEY_PORT, 3, 0, GPIO_MODE_OUTPUT, GPIO_INTERRUPT_OFF, GPIO_BIT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
-    {KEY_PORT, 5, 0, GPIO_MODE_INPUT, GPIO_INTERRUPT_OFF, GPIO_BIT_ALL_NOT_DAC, GPIO_DISABLED_ON},
-    {KEY_PORT, 6, 0, GPIO_MODE_INPUT, GPIO_INTERRUPT_OFF, GPIO_BIT_ALL_NOT_DAC, GPIO_DISABLED_ON},
-    {KEY_PORT, 7, 0, GPIO_MODE_OUTPUT, GPIO_INTERRUPT_OFF, GPIO_BIT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
-    {KEY_PORT, 8, 0, GPIO_MODE_OUTPUT, GPIO_INTERRUPT_OFF, GPIO_BIT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
-    {KEY_PORT, 9, 0, GPIO_MODE_OUTPUT, GPIO_INTERRUPT_OFF, GPIO_BIT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
-    {KEY_PORT, 10, 0, GPIO_MODE_OUTPUT, GPIO_INTERRUPT_OFF, GPIO_BIT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
-    {KEY_PORT, 20, 0, GPIO_MODE_OUTPUT, GPIO_INTERRUPT_OFF, GPIO_BIT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
-    {KEY_PORT, 21, 0, GPIO_MODE_OUTPUT, GPIO_INTERRUPT_OFF, GPIO_BIT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
+    {KEY_PORT, 1, 0, PORT_OUTPUT, GPIO_INTERRUPT_OFF, PORT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
+    {KEY_PORT, 2, 0, PORT_OUTPUT, GPIO_INTERRUPT_OFF, PORT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
+    {KEY_PORT, 3, 0, PORT_OUTPUT, GPIO_INTERRUPT_OFF, PORT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
+    {KEY_PORT, 5, 0, PORT_INPUT, GPIO_INTERRUPT_OFF, PORT_ALL_NOT_DAC, GPIO_DISABLED_ON},
+    {KEY_PORT, 6, 0, PORT_INPUT, GPIO_INTERRUPT_OFF, PORT_ALL_NOT_DAC, GPIO_DISABLED_ON},
+    {KEY_PORT, 7, 0, PORT_OUTPUT, GPIO_INTERRUPT_OFF, PORT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
+    {KEY_PORT, 8, 0, PORT_OUTPUT, GPIO_INTERRUPT_OFF, PORT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
+    {KEY_PORT, 9, 0, PORT_OUTPUT, GPIO_INTERRUPT_OFF, PORT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
+    {KEY_PORT, 10, 0, PORT_OUTPUT, GPIO_INTERRUPT_OFF, PORT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
+    {KEY_PORT, 20, 0, PORT_OUTPUT, GPIO_INTERRUPT_OFF, PORT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
+    {KEY_PORT, 21, 0, PORT_OUTPUT, GPIO_INTERRUPT_OFF, PORT_ALL_NOT_DAC, GPIO_DISABLED_OFF},
 };
 
 OneWire* ds = nullptr;
@@ -35,9 +35,22 @@ void ICACHE_RAM_ATTR btnIsr() {
   btnStatus = 1;
 }
 
+uint8_t pinModeOf(uint8_t mode) {
+  switch (mode) {
+    case PORT_OUTPUT:
+      return OUTPUT;
+    case PORT_INPUT_PULLUP:
+      return INPUT_PULLUP;
+    case PORT_OUTPUT_OPEN_DRAIN:
+      return OUTPUT_OPEN_DRAIN;
+    default:
+      return INPUT;
+  }
+}
+
 void initGPIO() {
   for (uint8_t i = 0; i < ports_len; i++) {
-    if (ports[i].mode == GPIO_MODE_ONEWIRE) {
+    if (ports[i].mode == PORT_ONEWIRE) {
       if (!isOneWire) {
         if (ds) delete ds;
         ds = new OneWire(ports[i].gpio);
@@ -45,20 +58,24 @@ void initGPIO() {
       }
       continue;
     }
-    if (ports[i].mode == GPIO_MODE_PWM) {
+    if (ports[i].mode == PORT_PWM) {
       pinMode(ports[i].gpio, OUTPUT);
       analogWrite(ports[i].gpio, ports[i].value);
-    } else if (ports[i].mode == GPIO_MODE_ADC) {
+    } else if (ports[i].mode == PORT_ADC) {
       pinMode(ports[i].gpio, INPUT);
       ports[i].value = analogRead(ports[i].gpio);
       isADC = 1;
+    } else if (ports[i].mode == PORT_DAC) {
+#if defined(ESP32) && !defined(ARDUINO_ESP32C3_DEV)
+      dacWrite(ports[i].gpio, ports[i].value);
+#endif
     } else {
-      pinMode(ports[i].gpio, ports[i].mode);
-      if (ports[i].mode == OUTPUT || ports[i].mode == OUTPUT_OPEN_DRAIN) digitalWrite(ports[i].gpio, ports[i].value);
+      pinMode(ports[i].gpio, pinModeOf(ports[i].mode));
+      if (ports[i].mode == PORT_OUTPUT || ports[i].mode == PORT_OUTPUT_OPEN_DRAIN) digitalWrite(ports[i].gpio, ports[i].value);
 
       ports[i].value = digitalRead(ports[i].gpio);
       ports[i].valueOld = ports[i].value;
-      if ((ports[i].mode == INPUT || ports[i].mode == INPUT_PULLUP) && ports[i].interrupt) {
+      if ((ports[i].mode == PORT_INPUT || ports[i].mode == PORT_INPUT_PULLUP) && ports[i].interrupt) {
         attachInterrupt(digitalPinToInterrupt(ports[i].gpio), btnIsr, ports[i].interrupt);
       }
     }
@@ -67,8 +84,8 @@ void initGPIO() {
 
 void getAll() {
   for (int i = 0; i < ports_len; i++) {
-    if (ports[i].mode == GPIO_MODE_PWM || ports[i].mode == GPIO_MODE_ONEWIRE || ports[i].mode == GPIO_MODE_DAC) {
-    } else if (ports[i].mode == GPIO_MODE_ADC) {
+    if (ports[i].mode == PORT_PWM || ports[i].mode == PORT_ONEWIRE || ports[i].mode == PORT_DAC) {
+    } else if (ports[i].mode == PORT_ADC) {
       ports[i].value = analogRead(ports[i].gpio);
     } else {
       ports[i].value = digitalRead(ports[i].gpio);
@@ -79,7 +96,7 @@ void getAll() {
 
 void getADC() {
   for (int i = 0; i < ports_len; i++) {
-    if (ports[i].mode == GPIO_MODE_ADC) {
+    if (ports[i].mode == PORT_ADC) {
       ports[i].value = analogRead(ports[i].gpio);
       wsSendAll((uint8_t*)&ports[i], sizeof(ports[i]));
     }
@@ -106,10 +123,10 @@ void updatePort(uint8_t gpio, uint16_t value) {
 }
 
 void setValue(uint8_t gpio, uint16_t value, uint8_t mode) {
-  if (mode == GPIO_MODE_PWM) {
+  if (mode == PORT_PWM) {
     analogWrite(gpio, value);
   } else {
-    if (!(mode == INPUT || mode == INPUT_PULLUP)) digitalWrite(gpio, value);
+    if (!(mode == PORT_INPUT || mode == PORT_INPUT_PULLUP)) digitalWrite(gpio, value);
   }
 }
 
@@ -134,10 +151,10 @@ uint16_t getValue(uint8_t gpio, uint16_t& value) {
 
 void setValueUpdate() {
   setValue(port.gpio, port.value, port.mode);
-  if (port.mode == GPIO_MODE_PWM || port.mode == GPIO_MODE_ONEWIRE) {
-  } else if (port.mode == GPIO_MODE_ADC) {
+  if (port.mode == PORT_PWM || port.mode == PORT_ONEWIRE) {
+  } else if (port.mode == PORT_ADC) {
     port.value = analogRead(port.gpio);
-  } else if (port.mode == GPIO_MODE_DAC) {
+  } else if (port.mode == PORT_DAC) {
 #if defined(ARDUINO_ESP32C3_DEV)
 #elif defined(ESP32)
     dacWrite(port.gpio, port.value);
@@ -150,7 +167,7 @@ void setValueUpdate() {
 
 void loopInterrupt(uint32_t now) {
   for (int i = 0; i < ports_len; i++) {
-    if (!(ports[i].mode == INPUT || ports[i].mode == INPUT_PULLUP) && !ports[i].interrupt) continue;
+    if (!(ports[i].mode == PORT_INPUT || ports[i].mode == PORT_INPUT_PULLUP) && !ports[i].interrupt) continue;
     uint32_t time = now - ports[i].pressStart;
     if (time > REPEAT_START_TIME) {
       if (ports[i].isPressed && ports[i].count == 1) {
@@ -185,7 +202,7 @@ void loopInterrupt(uint32_t now) {
 
 void checkInterrupt(uint32_t now) {
   for (int i = 0; i < ports_len; i++) {
-    if (!(ports[i].mode == INPUT || ports[i].mode == INPUT_PULLUP) && !ports[i].interrupt) continue;
+    if (!(ports[i].mode == PORT_INPUT || ports[i].mode == PORT_INPUT_PULLUP) && !ports[i].interrupt) continue;
 
     port = ports[i];
     port.value = digitalRead(port.gpio);
@@ -319,11 +336,11 @@ void loopGPIO(uint32_t now) {
   }
 
   if (tasks[KEY_PORT]) {
-    if (port.command == GPIO_COMMAND_SAVE) saveConfigBlock(DEF_PATH_GPIO, (uint8_t*)ports, sizeof(ports));
-    if (port.command == GPIO_COMMAND_SET) setValueUpdate();
+    if (port.command == CMD_SAVE) saveConfigBlock(DEF_PATH_GPIO, (uint8_t*)ports, sizeof(ports));
+    if (port.command == CMD_SET) setValueUpdate();
 
-    if (port.command == GPIO_COMMAND_GET_ALL) getAll();
-    if (port.command == GPIO_COMMAND_CHANGE) updatePort();
+    if (port.command == CMD_GET_ALL) getAll();
+    if (port.command == CMD_CHANGE) updatePort();
     port.command = 0;
     tasks[KEY_PORT] = 0;
   };

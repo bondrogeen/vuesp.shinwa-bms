@@ -57,8 +57,8 @@ import { setStateItem, getStateItem, dashboardCards } from 'vuesp-components/das
 import { randomString } from 'vuesp-components/helpers';
 import { useFetch } from '@vueuse/core';
 
-import { KEYS } from '@/utils/const';
-import { COMMAND } from '@/utils/gpio';
+import { KEY } from '@/utils/const';
+import { CMD, PORT } from '@/generated/protocol';
 
 import { useConnection } from '@/composables/useConnection';
 import { pathListDef } from '@/utils/const';
@@ -73,10 +73,10 @@ import VIcons from '@/components/ui/icons/VIcons.vue';
 const { $t } = useLocale();
 
 const { dashboard, main, onSend } = useConnection((send) => {
-  send(KEYS.PORT, { gpio: 0, command: COMMAND.GPIO_COMMAND_GET_ALL });
-  send(KEYS.DEVICE);
-  send(KEYS.BUFFER);
-  send(KEYS.DISCOVERY, { comm: 1 });
+  send(KEY.PORT, { gpio: 0, command: CMD.GET_ALL });
+  send(KEY.DEVICE);
+  send(KEY.BUFFER);
+  send(KEY.DISCOVERY, { command: CMD.GET });
 });
 
 const dialogItem = ref(false);
@@ -94,7 +94,7 @@ const getComponent = ({ type = 'info' }) => {
 };
 
 const onUpdate = () => {
-  onSend(KEYS.BUFFER);
+  onSend(KEY.BUFFER);
 };
 
 const onButton = (key: string, item: IDashboardItem) => {
@@ -133,8 +133,8 @@ const onSave = async () => {
 };
 
 const onDefault = () => {
-  onSend(KEYS.PORT, { gpio: 0, command: COMMAND.GPIO_COMMAND_SAVE });
-  onSend(KEYS.DEVICE, { command: 254 });
+  onSend(KEY.PORT, { gpio: 0, command: CMD.SAVE });
+  onSend(KEY.DEVICE, { command: CMD.SAVE });
 };
 
 const onMenu = ({ value }: IListItem<number>) => {
@@ -151,19 +151,41 @@ const onDialog = (data: IDashboardItem) => {
   dialogItem.value = true;
 };
 
-const getState = (item: IDashboardItem) => getStateItem(item, main.value);
+const scope = { CMD, KEY, PORT };
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
+const messageKeys: Record<string, string> = {
+  device: 'DEVICE',
+  ports: 'PORT',
+  info: 'INFO',
+  dallas: 'DALLAS',
+  discovery: 'DISCOVERY',
+  settings: 'SETTINGS',
+  buffer: 'BUFFER',
+  progress: 'PROGRESS',
+  message: 'MESSAGE',
+  slots: 'MESSAGE',
+};
+
+const commandKey = (item: IDashboardItem, entry: Record<string, unknown>) => {
+  if (typeof entry.key === 'string' || typeof entry.key === 'number') return entry.key;
+  const root = (item.args?.[0] ?? '').split('.')[0]?.toLowerCase() ?? '';
+  return messageKeys[root] ?? (root ? root.toUpperCase() : '');
+};
+
+const getState = (item: IDashboardItem) => getStateItem(item, main.value, scope);
 
 const setState = (item: IDashboardItem, value: unknown) => {
-  const data = setStateItem(item, value, main.value);
-  if (Array.isArray(data)) {
-    data.forEach((el) => {
-      const key = el?.key;
-      if (key && el) onSend(key, el);
-    });
-    return;
+  const result = setStateItem(item, value, main.value, scope);
+  const list = Array.isArray(result) ? result : [result];
+
+  for (const entry of list) {
+    if (!isRecord(entry)) continue;
+    const key = commandKey(item, entry);
+    if (key) onSend(key as keyof typeof KEY | number, entry);
   }
-  const key = data.key;
-  if (key && data) onSend(key, data);
 };
 
 const icons = [

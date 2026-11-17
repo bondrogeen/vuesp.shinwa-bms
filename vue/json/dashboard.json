@@ -8,7 +8,7 @@
     },
     "icon": "plug",
     "args": ["device.lastTime"],
-    "get": "v === 0 ? 1 : 0",
+    "get": "a === 0 ? 1 : 0",
     "getTo": "v ? 'ONLINE' : 'OFFLINE'"
   },
   {
@@ -20,7 +20,7 @@
     },
     "icon": "bulb",
     "args": ["device.status3"],
-    "get": "v & 2",
+    "get": "a & 2",
     "getTo": "v ? 'ON' : 'OFF'"
   },
   {
@@ -32,7 +32,7 @@
     },
     "icon": "bulb",
     "args": ["device.status3"],
-    "get": "v & 4",
+    "get": "a & 4",
     "getTo": "v ? 'ON' : 'OFF'"
   },
   {
@@ -41,7 +41,7 @@
     "type": "info",
     "icon": "battery-2",
     "args": ["device.voltage"],
-    "get": "v/1000",
+    "get": "a/1000",
     "getTo": "`${v} V`"
   },
   {
@@ -50,7 +50,7 @@
     "type": "info",
     "icon": "light",
     "args": ["device.current"],
-    "get": "v/100",
+    "get": "a/100",
     "getTo": "`${v} A`"
   },
   {
@@ -59,7 +59,7 @@
     "type": "info",
     "icon": "battery",
     "args": ["device.cell1", "device.cell2", "device.cell3", "device.cell4"],
-    "get": "Math.max(v, a, b, c)",
+    "get": "Math.max(a, b, c, d)",
     "getTo": "`${(v / 1000).toFixed(3)} V`"
   },
   {
@@ -68,7 +68,7 @@
     "type": "info",
     "icon": "battery",
     "args": ["device.cell1", "device.cell2", "device.cell3", "device.cell4"],
-    "get": "Math.min(v, a, b, c)",
+    "get": "Math.min(a, b, c, d)",
     "getTo": "`${(v / 1000).toFixed(3)} V`"
   },
   {
@@ -77,7 +77,7 @@
     "type": "info",
     "icon": "battery",
     "args": ["device.cell1", "device.cell2", "device.cell3", "device.cell4"],
-    "get": "Math.max(v, a, b, c) - Math.min(v, a, b, c)",
+    "get": "Math.max(a, b, c, d) - Math.min(a, b, c, d)",
     "getTo": "`${(v / 1000)} V`"
   },
   {
@@ -86,7 +86,7 @@
     "type": "info",
     "icon": "battery",
     "args": ["device.cell1"],
-    "get": "(v/1000).toFixed(3)",
+    "get": "(a/1000).toFixed(3)",
     "getTo": "`${v} V`"
   },
   {
@@ -95,7 +95,7 @@
     "type": "info",
     "icon": "battery",
     "args": ["device.cell2"],
-    "get": "(v/1000).toFixed(3)",
+    "get": "(a/1000).toFixed(3)",
     "getTo": "`${v} V`"
   },
   {
@@ -104,7 +104,7 @@
     "type": "info",
     "icon": "battery",
     "args": ["device.cell3"],
-    "get": "(v/1000).toFixed(3)",
+    "get": "(a/1000).toFixed(3)",
     "getTo": "`${v} V`"
   },
   {
@@ -113,7 +113,7 @@
     "type": "info",
     "icon": "battery",
     "args": ["device.cell4"],
-    "get": "(v/1000).toFixed(3)",
+    "get": "(a/1000).toFixed(3)",
     "getTo": "`${v} V`"
   },
   {
@@ -137,7 +137,7 @@
     "type": "info",
     "icon": "therm",
     "args": ["device.temp1"],
-    "get": "(v/10).toFixed(2)",
+    "get": "(a/10).toFixed(2)",
     "getTo": "`${v} °C`"
   },
   {
@@ -146,7 +146,7 @@
     "type": "info",
     "icon": "therm",
     "args": ["device.temp2"],
-    "get": "(v/10).toFixed(2)",
+    "get": "(a/10).toFixed(2)",
     "getTo": "`${v} °C`"
   },
   {
@@ -155,7 +155,7 @@
     "type": "info",
     "icon": "therm",
     "args": ["device.temp3"],
-    "get": "(v/10).toFixed(2)",
+    "get": "(a/10).toFixed(2)",
     "getTo": "`${v} °C`"
   },
   {
@@ -164,7 +164,7 @@
     "type": "info",
     "icon": "therm",
     "args": ["device.temp4"],
-    "get": "(v/10).toFixed(2)",
+    "get": "(a/10).toFixed(2)",
     "getTo": "`${v} °C`"
   }
 ]

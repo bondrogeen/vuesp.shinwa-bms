@@ -29,7 +29,7 @@
 
 #define DEF_DIR_DEVICE "/tmp"
 #define DEF_PATH_CONFIG DEF_DIR_DEVICE "/device.io"
-#define DEF_PATH_GPIO DEF_DIR_DEVICE "/gpio.io"
+#define DEF_PATH_GPIO DEF_DIR_DEVICE "/gpio.bin"
 
 #define COMMAND_GET 1
 #define COMMAND_SET 2
