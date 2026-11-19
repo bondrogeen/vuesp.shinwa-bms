@@ -12,7 +12,7 @@
     "getTo": "v ? 'ONLINE' : 'OFFLINE'"
   },
   {
-    "id": "device.status3",
+    "id": "device.chargeMosfet",
     "name": "Charge MOSFET",
     "type": "button",
     "opts": {
@@ -24,7 +24,7 @@
     "getTo": "v ? 'ON' : 'OFF'"
   },
   {
-    "id": "device.status3",
+    "id": "device.dischargeMosfet",
     "name": "Discharge MOSFET",
     "type": "button",
     "opts": {
